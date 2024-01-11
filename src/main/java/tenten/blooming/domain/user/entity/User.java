@@ -3,8 +3,11 @@ package tenten.blooming.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import tenten.blooming.domain.goal.entity.Goal;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,4 +36,6 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
 
+    @OneToMany(mappedBy = "user")
+    private List<Goal> goals = new ArrayList<>();
 }
