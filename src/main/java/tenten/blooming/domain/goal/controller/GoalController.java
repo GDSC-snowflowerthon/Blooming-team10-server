@@ -1,5 +1,5 @@
 package tenten.blooming.domain.goal.controller;
-import jakarta.persistence.Basic;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
-import tenten.blooming.domain.goal.dto.ChatRequest;
-import tenten.blooming.domain.goal.dto.ChatResponse;
-import tenten.blooming.domain.goal.dto.GoalDto;
+import tenten.blooming.domain.goal.dto.*;
 import tenten.blooming.domain.goal.entity.Goal;
 import tenten.blooming.domain.goal.service.GoalService;
 import tenten.blooming.global.common.BasicResponse;
+
+import java.util.Arrays;
 
 @RestController
 public class GoalController {
@@ -48,16 +48,32 @@ public class GoalController {
 
     }
 
-    @GetMapping("/goal")
-    public String getSubGoal(@RequestParam String goalName) {
+    @GetMapping("/goal/{goalId}")
+    public ResponseEntity<GoalResponse> getSubGoal(@PathVariable Long goalId, @RequestParam String goalName) {
         ChatRequest request = new ChatRequest(model, goalName);
 
         ChatResponse response = restTemplate.postForObject(apiUrl, request, ChatResponse.class);
 
         if (response == null || response.getChoices() == null || response.getChoices().isEmpty()) {
-            return "No response";
+            return new ResponseEntity<>(new GoalResponse(HttpStatus.BAD_REQUEST.value(), "세부 목표 조회에 실패했습니다.", null), HttpStatus.BAD_REQUEST);
         }
 
-        return response.getChoices().get(0).getMessage().getContent();
+        String subgoalContent = response.getChoices().get(0).getMessage().getContent();
+
+        GoalResponse.GoalResult goalResult = new GoalResponse.GoalResult();
+
+        goalResult.setGoalId(goalId);
+        goalResult.setGoalName(goalName);
+        goalResult.setSubgoalList(Arrays.asList(
+                subgoalContent.split("\n")
+        ));
+
+        GoalResponse goalResponse = GoalResponse.builder()
+                .code(HttpStatus.OK.value())
+                .message("세부 목표 조회에 성공했습니다.")
+                .result(goalResult)
+                .build();
+
+        return new ResponseEntity<>(goalResponse, HttpStatus.OK);
     }
 }
