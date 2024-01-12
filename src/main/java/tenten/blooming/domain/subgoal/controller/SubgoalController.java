@@ -11,8 +11,6 @@ import tenten.blooming.domain.subgoal.dto.SubgoalResponse;
 import tenten.blooming.domain.subgoal.entity.Subgoal;
 import tenten.blooming.domain.subgoal.repository.SubgoalRepository;
 import tenten.blooming.domain.subgoal.service.SubgoalService;
-import tenten.blooming.domain.user.entity.User;
-import tenten.blooming.domain.user.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
