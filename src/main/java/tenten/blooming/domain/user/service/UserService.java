@@ -45,8 +45,23 @@ public class UserService {
         User findUser = userRepository.findByLoginId(loginId);
 
         List<Goal> goals = findUser.getGoals();
-        Goal activeGoal = goals.get(goals.size() - 1);
+        Goal activeGoal = null;
+        if (!goals.isEmpty()) {
+            activeGoal = goals.get(goals.size() - 1);
+            return activeGoal.getGoalId();
+        }
 
-        return activeGoal.getGoalId();
+
+        return null;
+    }
+
+    public Boolean hasGoal(String loginId) {
+        User findUser = userRepository.findByLoginId(loginId);
+
+        List<Goal> goals = findUser.getGoals();
+        if (goals.isEmpty()) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 }
