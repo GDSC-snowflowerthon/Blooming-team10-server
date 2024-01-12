@@ -1,6 +1,7 @@
 package tenten.blooming.domain.subgoal.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tenten.blooming.domain.subgoal.dto.CompletedGoalInfoResponse;
@@ -33,9 +34,13 @@ public class SubgoalController {
 
         responseUpdateSubgoal.setSubgoalName(findSubgoal.getSubgoalName());
 
-        List<LocalDate> doneDates = subgoalService.updateSubgoal(subgoalId);
-        responseUpdateSubgoal.setDoneDateList(doneDates);
-
+        try {
+            List<LocalDate> doneDates = subgoalService.updateSubgoal(subgoalId);
+            responseUpdateSubgoal.setDoneDateList(doneDates);
+        } catch (IllegalStateException e) {
+            responseUpdateSubgoal.setErrorMsg(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseUpdateSubgoal);
+        }
         return ResponseEntity.ok(responseUpdateSubgoal);
     }
 

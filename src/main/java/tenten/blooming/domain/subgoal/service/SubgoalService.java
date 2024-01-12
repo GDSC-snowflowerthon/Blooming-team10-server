@@ -125,7 +125,6 @@ public class SubgoalService {
                 if(i > 0 && (Objects.equals(doneDates.get(i - 1), today))) {
                     throw new IllegalStateException("이미 체크된 TASK입니다.");
                 }
-                System.out.println(i);
                 switch (i + 1) {
                     case 1: {
                         findSubgoal.setDoneDate1(today);

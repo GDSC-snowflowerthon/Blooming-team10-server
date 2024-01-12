@@ -13,4 +13,5 @@ import java.util.List;
 public class ResponseUpdateSubgoal {
     private List<LocalDate> doneDateList;
     private String subgoalName;
+    private String errorMsg = null;
 }
