@@ -1,10 +1,12 @@
 package tenten.blooming.domain.user.controller;
 
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tenten.blooming.domain.user.dto.LoginResponse;
 import tenten.blooming.domain.user.entity.User;
 import tenten.blooming.domain.user.dto.UserForm;
 import tenten.blooming.domain.user.service.UserService;
@@ -35,25 +37,36 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<BasicResponse> login(@RequestBody UserForm dto) {
+    public ResponseEntity<LoginResponse> login(@RequestBody UserForm dto) {
         try {
             User user = userService.login(dto.getLoginId(), dto.getPassword());
 
-            BasicResponse basicResponse = BasicResponse.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("로그인에 성공하였습니다.")
-                    .result(user)
-                    .build();
+            LoginResponse.LoginResult loginResult = new LoginResponse.LoginResult();
 
-            return new ResponseEntity<>(basicResponse, HttpStatus.OK);
+            Long activeGoalId = userService.getActiveGoalIdByLoginId(dto.getLoginId());
+
+            loginResult.setLoginId(user.getLoginId());
+            loginResult.setPassword(user.getPassword());
+            loginResult.setNickname(user.getNickname());
+            loginResult.setHasGoal(user.getHasGoal());
+            loginResult.setCreatedAt(user.getCreatedAt());
+            loginResult.setUserId(user.getUserId());
+            loginResult.setActiveGoalId(activeGoalId);
+
+            LoginResponse loginResponse = LoginResponse.builder()
+                            .code(HttpStatus.OK.value())
+                    .message("로그인에 성공했습니다.")
+                    .result(loginResult)
+                    .build();
+            return new ResponseEntity<>(loginResponse, HttpStatus.OK);
         } catch (DataIntegrityViolationException e) {
-            BasicResponse basicResponse = BasicResponse.builder()
+            LoginResponse loginResponse = LoginResponse.builder()
                     .code(HttpStatus.BAD_REQUEST.value())
                     .message("로그인에 실패했습니다.")
                     .result(null)
                     .build();
 
-            return new ResponseEntity<>(basicResponse, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(loginResponse, HttpStatus.BAD_REQUEST);
         }
     }
 }

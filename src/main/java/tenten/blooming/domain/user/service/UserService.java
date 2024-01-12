@@ -3,9 +3,13 @@ package tenten.blooming.domain.user.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import tenten.blooming.domain.goal.entity.Goal;
 import tenten.blooming.domain.user.repository.UserRepository;
 import tenten.blooming.domain.user.dto.UserForm;
 import tenten.blooming.domain.user.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -35,5 +39,14 @@ public class UserService {
         } else {
             throw new DataIntegrityViolationException("로그인에 실패하였습니다.");
         }
+    }
+
+    public Long getActiveGoalIdByLoginId(String loginId) {
+        User findUser = userRepository.findByLoginId(loginId);
+
+        List<Goal> goals = findUser.getGoals();
+        Goal activeGoal = goals.get(goals.size() - 1);
+
+        return activeGoal.getGoalId();
     }
 }
