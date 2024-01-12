@@ -2,10 +2,8 @@ package tenten.blooming.domain.subgoal.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import tenten.blooming.domain.subgoal.dto.CompletedGoalInfoResponse;
-import tenten.blooming.domain.subgoal.dto.GetUserIdRequest;
 import tenten.blooming.domain.subgoal.dto.ResponseUpdateSubgoal;
 import tenten.blooming.domain.subgoal.dto.SubgoalResponse;
 import tenten.blooming.domain.subgoal.entity.Subgoal;
@@ -41,24 +39,20 @@ public class SubgoalController {
         return ResponseEntity.ok(responseUpdateSubgoal);
     }
 
-    @GetMapping("/subgoal/{goalId}/progress")
-    public ResponseEntity<SubgoalResponse> getSubgoalInfoByUserId(
-            @PathVariable Long goalId,
-            @RequestBody @Validated GetUserIdRequest request
-        ) {
-        SubgoalResponse subgoalResponse = subgoalService.getSubgoalInfoByUserId(request.getUserId());
+    @GetMapping("/subgoal/{userId}/progress")
+    public ResponseEntity<SubgoalResponse> getSubgoalInfoByUserId(@PathVariable Long userId) {
+        SubgoalResponse subgoalResponse = subgoalService.getSubgoalInfoByUserId(userId);
 
-        User findUser = userRepository.findById(request.getUserId()).orElse(null);
+        User findUser = userRepository.findById(userId).orElse(null);
         subgoalResponse.setNickname(findUser.getNickname());
 
         return ResponseEntity.ok(subgoalResponse);
     }
 
-    @GetMapping("/snows")
-    public ResponseEntity<CompletedGoalInfoResponse> getCompletedGoalInfos(
-            @RequestBody @Validated GetUserIdRequest request)
+    @GetMapping("/snows/{userId}")
+    public ResponseEntity<CompletedGoalInfoResponse> getCompletedGoalInfos(@PathVariable Long userId)
     {
-        CompletedGoalInfoResponse completedGoalInfoResponse = subgoalService.getCompletedGoalInfo(request.getUserId());
+        CompletedGoalInfoResponse completedGoalInfoResponse = subgoalService.getCompletedGoalInfo(userId);
 
         return ResponseEntity.ok(completedGoalInfoResponse);
     }
