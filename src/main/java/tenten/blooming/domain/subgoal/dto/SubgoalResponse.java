@@ -20,9 +20,8 @@ public class SubgoalResponse {
     @Data
     @NoArgsConstructor
     public static class SubgoalInfo {
-        private Long subgoalId;
         private String subgoalName;
-        private List<LocalDate> doneDates;
+        private List<LocalDate> doneDateList;
     }
 }
 

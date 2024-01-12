@@ -24,11 +24,7 @@ public class SubgoalController {
     public ResponseEntity<List<LocalDate>> updateSubgoal(
             @PathVariable("goalId") Long goalId,
             @PathVariable("subgoalId") Long subgoalId
-//            ,@RequestBody @Validated UpdateSubgoalRequest request
     ) {
-//        Goal goal = goalRepository.findById(goalId).orElse(null);
-//        goal.getSubgoals();
-
         List<LocalDate> doneDates = subgoalService.updateSubgoal(subgoalId);
 
         return ResponseEntity.ok(doneDates);
