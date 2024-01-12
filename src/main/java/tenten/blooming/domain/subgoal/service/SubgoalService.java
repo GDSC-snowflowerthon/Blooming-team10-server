@@ -1,11 +1,9 @@
 package tenten.blooming.domain.subgoal.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tenten.blooming.domain.goal.entity.Goal;
-import tenten.blooming.domain.goal.repository.GoalRepository;
 import tenten.blooming.domain.subgoal.dto.CompletedGoalInfoResponse;
 import tenten.blooming.domain.subgoal.dto.SubgoalResponse;
 import tenten.blooming.domain.subgoal.entity.Subgoal;
@@ -15,18 +13,16 @@ import tenten.blooming.domain.user.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SubgoalService {
 
-    @Autowired private final UserRepository userRepository;
-    @Autowired private final SubgoalRepository subgoalRepository;
-    @Autowired private final GoalRepository goalRepository;
+    private final UserRepository userRepository;
+    private final SubgoalRepository subgoalRepository;
+
     /**
      * Subgoal 생성
      */
@@ -47,6 +43,9 @@ public class SubgoalService {
         return addDoneDate(subgoalId);
     }
 
+    /**
+     * user의 모든 goal을 반환한다.
+     */
     public List<Goal> getGoalByUserId(Long userId) {
         User findUser = userRepository.findById(userId).orElse(null);
 
@@ -55,8 +54,6 @@ public class SubgoalService {
 
     /**
      * goalName, goalId, goalCreateDate, subgoalList 반환
-     * @param goal
-     * @return
      */
     public SubgoalResponse getGoalInfo(Goal goal) {
         List<Subgoal> subgoals = goal.getSubgoals();
@@ -103,7 +100,7 @@ public class SubgoalService {
             goalList.add(getGoalInfo(goal));
         }
 
-        if(goalList.size() != 0 && (user.getHasGoal() == true)) {
+        if(!goalList.isEmpty() && (user.getHasGoal())) {
             goalList.remove(goalList.size() - 1);
         }
 
@@ -112,10 +109,6 @@ public class SubgoalService {
 
         return completedGoalInfoResponse;
     }
-
-
-    //==비즈니스 로직==//
-
 
     /**
      * doneDate를 현재 날짜로 입력하고, 업데이트된 doneDates 리스트 반환
@@ -130,8 +123,6 @@ public class SubgoalService {
                 if(i != 0 && (doneDates.get(i-1) == LocalDate.now())) {
                     throw new IllegalStateException("이미 체크된 TASK입니다.");
                 }
-
-                //doneDatei를 수정해야 한다.
 
                 switch (i + 1) {
                     case 1: {
@@ -185,11 +176,9 @@ public class SubgoalService {
                         break;
                     }
                 }
-
                 break;
             }
         }
-
         return doneDates;
     }
 }
