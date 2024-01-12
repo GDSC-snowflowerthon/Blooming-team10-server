@@ -21,6 +21,7 @@ public class GoalDto {
         goal.setGoalName(goalName);
         goal.setCreatedAt(LocalDate.now());
         goal.setIsActivate(true);
+        goal.setUserId(userId);
 
         return goal;
     }
