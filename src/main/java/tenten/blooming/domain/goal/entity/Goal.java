@@ -36,11 +36,15 @@ public class Goal {
     @Column(name = "is_activate")
     private Boolean isActivate;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @OneToMany(mappedBy = "goal")
     private List<Subgoal> subgoals = new ArrayList<>();
+
 
 }
