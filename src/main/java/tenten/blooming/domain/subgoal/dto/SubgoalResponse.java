@@ -16,6 +16,7 @@ public class SubgoalResponse {
     private Long goalId;
     private LocalDate goalCreateDate;
     private List<SubgoalInfo> SubgoalList;
+    private String nickname;
 
     @Data
     @NoArgsConstructor

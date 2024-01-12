@@ -59,7 +59,6 @@ public class SubgoalService {
         List<Subgoal> subgoals = goal.getSubgoals();
         List<SubgoalResponse.SubgoalInfo> subgoalInfoList = new ArrayList<>();
 
-
         SubgoalResponse subgoalResponse = new SubgoalResponse();
 
         for(Subgoal subgoal : subgoals) {
