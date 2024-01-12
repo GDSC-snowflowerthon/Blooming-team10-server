@@ -122,7 +122,6 @@ public class SubgoalService {
 
         for(int i = 0; i < doneDates.size(); i++) {
             if(doneDates.get(i) == null) {
-                System.out.println(doneDates.get(i-1));
                 if(i > 0 && (Objects.equals(doneDates.get(i - 1), today))) {
                     throw new IllegalStateException("이미 체크된 TASK입니다.");
                 }
