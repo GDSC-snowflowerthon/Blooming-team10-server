@@ -77,6 +77,7 @@ public class SubgoalService {
 
         return subgoalResponse;
     }
+
     public SubgoalResponse getSubgoalInfoByUserId(Long userId) {
         //userId의 모든 goal 받아오기
         List<Goal> goals = getGoalByUserId(userId);
@@ -123,7 +124,7 @@ public class SubgoalService {
                 if(i != 0 && (doneDates.get(i-1) == LocalDate.now())) {
                     throw new IllegalStateException("이미 체크된 TASK입니다.");
                 }
-
+                System.out.println(i);
                 switch (i + 1) {
                     case 1: {
                         findSubgoal.setDoneDate1(LocalDate.now());

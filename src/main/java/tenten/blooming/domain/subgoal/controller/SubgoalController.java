@@ -6,8 +6,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import tenten.blooming.domain.subgoal.dto.CompletedGoalInfoResponse;
 import tenten.blooming.domain.subgoal.dto.GetUserIdRequest;
+import tenten.blooming.domain.subgoal.dto.ResponseUpdateSubgoal;
 import tenten.blooming.domain.subgoal.dto.SubgoalResponse;
+import tenten.blooming.domain.subgoal.entity.Subgoal;
+import tenten.blooming.domain.subgoal.repository.SubgoalRepository;
 import tenten.blooming.domain.subgoal.service.SubgoalService;
+import tenten.blooming.domain.user.entity.User;
+import tenten.blooming.domain.user.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,15 +22,22 @@ import java.util.List;
 public class SubgoalController {
 
     private final SubgoalService subgoalService;
+    private final SubgoalRepository subgoalRepository;
 
     @PostMapping("/subgoal/{goalId}/detail/{subgoalId}")
-    public ResponseEntity<List<LocalDate>> updateSubgoal(
+    public ResponseEntity<ResponseUpdateSubgoal> updateSubgoal(
             @PathVariable("goalId") Long goalId,
             @PathVariable("subgoalId") Long subgoalId
     ) {
-        List<LocalDate> doneDates = subgoalService.updateSubgoal(subgoalId);
+        Subgoal findSubgoal = subgoalRepository.findById(subgoalId).orElse(null);
+        ResponseUpdateSubgoal responseUpdateSubgoal = new ResponseUpdateSubgoal();
 
-        return ResponseEntity.ok(doneDates);
+        responseUpdateSubgoal.setSubgoalName(findSubgoal.getSubgoalName());
+
+        List<LocalDate> doneDates = subgoalService.updateSubgoal(subgoalId);
+        responseUpdateSubgoal.setDoneDateList(doneDates);
+
+        return ResponseEntity.ok(responseUpdateSubgoal);
     }
 
     @GetMapping("/subgoal/{goalId}/progress")
