@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tenten.blooming.domain.goal.entity.Goal;
 import tenten.blooming.domain.goal.repository.GoalRepository;
+import tenten.blooming.domain.subgoal.dto.CompletedGoalInfoResponse;
 import tenten.blooming.domain.subgoal.dto.SubgoalResponse;
 import tenten.blooming.domain.subgoal.entity.Subgoal;
 import tenten.blooming.domain.subgoal.repository.SubgoalRepository;
@@ -51,12 +52,17 @@ public class SubgoalService {
         return findUser.getGoals();
     }
 
-    public SubgoalResponse getSubgoalInfoByUserId(Long userId) {
-        List<Goal> goals = getGoalByUserId(userId);
-        Goal goal = goals.get(goals.size() - 1);
+    /**
+     * goalName, goalId, goalCreateDate, subgoalList 반환
+     * @param goal
+     * @return
+     */
+    public SubgoalResponse getGoalInfo(Goal goal) {
         List<Subgoal> subgoals = goal.getSubgoals();
-        SubgoalResponse subgoalResponse = new SubgoalResponse();
         List<SubgoalResponse.SubgoalInfo> subgoalInfoList = new ArrayList<>();
+
+
+        SubgoalResponse subgoalResponse = new SubgoalResponse();
 
         for(Subgoal subgoal : subgoals) {
             SubgoalResponse.SubgoalInfo subgoalInfo = new SubgoalResponse.SubgoalInfo();
@@ -72,5 +78,37 @@ public class SubgoalService {
         subgoalResponse.setSubgoalList(subgoalInfoList);
 
         return subgoalResponse;
+    }
+    public SubgoalResponse getSubgoalInfoByUserId(Long userId) {
+        //userId의 모든 goal 받아오기
+        List<Goal> goals = getGoalByUserId(userId);
+
+        //해당 유저의 활성화된 goal 가져오기
+        Goal goal = goals.get(goals.size() - 1);
+
+        //goal의 정보 가져오기
+        return getGoalInfo(goal);
+    }
+
+    public CompletedGoalInfoResponse getCompletedGoalInfo(Long userId) {
+        List<Goal> goals = getGoalByUserId(userId);
+        User user = userRepository.findById(userId).orElse(null);
+
+        CompletedGoalInfoResponse completedGoalInfoResponse = new CompletedGoalInfoResponse();
+
+        List<SubgoalResponse> goalList = new ArrayList<>();
+
+        for(Goal goal : goals) {
+            goalList.add(getGoalInfo(goal));
+        }
+
+        if(goalList.size() != 0 && (user.getHasGoal() == true)) {
+            goalList.remove(goalList.size() - 1);
+        }
+
+        //completedGoalInfoResponse에 추가
+        completedGoalInfoResponse.setGoalList(goalList);
+
+        return completedGoalInfoResponse;
     }
 }

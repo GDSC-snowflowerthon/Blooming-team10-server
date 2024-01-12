@@ -6,6 +6,6 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetSubgoalInfoByUserIdRequest {
+public class GetUserIdRequest {
     private Long userId;
 }
