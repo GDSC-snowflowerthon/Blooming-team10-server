@@ -48,13 +48,17 @@ public class UserController {
             loginResult.setLoginId(user.getLoginId());
             loginResult.setPassword(user.getPassword());
             loginResult.setNickname(user.getNickname());
-            loginResult.setHasGoal(user.getHasGoal());
+            if (userService.hasGoal(dto.getLoginId())) {
+                loginResult.setHasGoal(Boolean.TRUE);
+            } else {
+                loginResult.setHasGoal(Boolean.FALSE);
+            }
             loginResult.setCreatedAt(user.getCreatedAt());
             loginResult.setUserId(user.getUserId());
             loginResult.setActiveGoalId(activeGoalId);
 
             LoginResponse loginResponse = LoginResponse.builder()
-                            .code(HttpStatus.OK.value())
+                    .code(HttpStatus.OK.value())
                     .message("로그인에 성공했습니다.")
                     .result(loginResult)
                     .build();
