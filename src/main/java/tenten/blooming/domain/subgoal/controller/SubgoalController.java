@@ -11,6 +11,8 @@ import tenten.blooming.domain.subgoal.dto.SubgoalResponse;
 import tenten.blooming.domain.subgoal.entity.Subgoal;
 import tenten.blooming.domain.subgoal.repository.SubgoalRepository;
 import tenten.blooming.domain.subgoal.service.SubgoalService;
+import tenten.blooming.domain.user.entity.User;
+import tenten.blooming.domain.user.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +23,7 @@ public class SubgoalController {
 
     private final SubgoalService subgoalService;
     private final SubgoalRepository subgoalRepository;
+    private final UserRepository userRepository;
 
     @PostMapping("/subgoal/{goalId}/detail/{subgoalId}")
     public ResponseEntity<ResponseUpdateSubgoal> updateSubgoal(
@@ -44,6 +47,9 @@ public class SubgoalController {
             @RequestBody @Validated GetUserIdRequest request
         ) {
         SubgoalResponse subgoalResponse = subgoalService.getSubgoalInfoByUserId(request.getUserId());
+
+        User findUser = userRepository.findById(request.getUserId()).orElse(null);
+        subgoalResponse.setNickname(findUser.getNickname());
 
         return ResponseEntity.ok(subgoalResponse);
     }

@@ -59,7 +59,6 @@ public class SubgoalService {
         List<Subgoal> subgoals = goal.getSubgoals();
         List<SubgoalResponse.SubgoalInfo> subgoalInfoList = new ArrayList<>();
 
-
         SubgoalResponse subgoalResponse = new SubgoalResponse();
 
         for(Subgoal subgoal : subgoals) {
@@ -118,16 +117,17 @@ public class SubgoalService {
     public List<LocalDate> addDoneDate(Long subgoalId) {
         Subgoal findSubgoal = subgoalRepository.findById(subgoalId).orElse(null);
         List<LocalDate> doneDates = findSubgoal.getDoneDates();
+        final LocalDate today = LocalDate.now();
 
         for(int i = 0; i < doneDates.size(); i++) {
             if(doneDates.get(i) == null) {
-                if(i != 0 && (doneDates.get(i-1) == LocalDate.now())) {
+                if(i != 0 && (doneDates.get(i-1) == today)) {
                     throw new IllegalStateException("이미 체크된 TASK입니다.");
                 }
                 System.out.println(i);
                 switch (i + 1) {
                     case 1: {
-                        findSubgoal.setDoneDate1(LocalDate.now());
+                        findSubgoal.setDoneDate1(today);
                         subgoalRepository.save(findSubgoal);
                         break;
                     }
