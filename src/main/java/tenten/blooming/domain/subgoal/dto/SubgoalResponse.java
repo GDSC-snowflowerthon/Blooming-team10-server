@@ -17,7 +17,7 @@ public class SubgoalResponse {
     private LocalDate goalCreateDate;
     private List<SubgoalInfo> SubgoalList;
     private String nickname;
-    private String errorMsg;
+    private String errorMsg = null;
 
     @Data
     @NoArgsConstructor
