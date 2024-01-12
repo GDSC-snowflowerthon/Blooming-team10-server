@@ -61,4 +61,5 @@ public class SubgoalController {
 
         return ResponseEntity.ok(completedGoalInfoResponse);
     }
+
 }

@@ -78,9 +78,16 @@ public class SubgoalService {
         return subgoalResponse;
     }
 
+    /**
+     * 해당 유저의 활성화된 goal 정보 가져오기
+     */
     public SubgoalResponse getSubgoalInfoByUserId(Long userId) {
         //userId의 모든 goal 받아오기
         List<Goal> goals = getGoalByUserId(userId);
+
+        User findUser = userRepository.findById(userId).orElse(null);
+
+        if(!findUser.getHasGoal()) { throw new IllegalStateException("활성화되어 있는 목표가 없습니다."); }
 
         //해당 유저의 활성화된 goal 가져오기
         Goal goal = goals.get(goals.size() - 1);
