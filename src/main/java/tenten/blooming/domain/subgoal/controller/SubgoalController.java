@@ -33,6 +33,7 @@ public class SubgoalController {
         return ResponseEntity.ok(doneDates);
     }
 
+
     @GetMapping("/subgoal/{goalId}/progress")
     public ResponseEntity<SubgoalResponse> getSubgoalInfoByUserId(
             @PathVariable Long goalId,
@@ -43,16 +44,11 @@ public class SubgoalController {
         return ResponseEntity.ok(subgoalResponse);
     }
 
-/*
-	"goalIdList": [],
-	"subgoalIdList":[],
- */
-    @GetMapping("/snows/{userId}")
+    @GetMapping("/snows")
     public ResponseEntity<CompletedGoalInfoResponse> getCompletedGoalInfos(
-            @PathVariable Long userId,
             @RequestBody @Validated GetUserIdRequest request)
     {
-        CompletedGoalInfoResponse completedGoalInfoResponse = subgoalService.getCompletedGoalInfo(userId);
+        CompletedGoalInfoResponse completedGoalInfoResponse = subgoalService.getCompletedGoalInfo(request.getUserId());
 
         return ResponseEntity.ok(completedGoalInfoResponse);
     }
