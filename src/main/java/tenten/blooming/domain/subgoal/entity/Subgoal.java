@@ -73,6 +73,7 @@ public class Subgoal {
                     throw new IllegalStateException("이미 체크된 TASK입니다.");
                 }
                 doneDates.set(i, LocalDate.now());
+                break;
             }
         }
 
