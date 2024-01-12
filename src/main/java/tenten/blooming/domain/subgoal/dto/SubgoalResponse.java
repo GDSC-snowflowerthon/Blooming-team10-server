@@ -15,11 +15,12 @@ public class SubgoalResponse {
     private String goalName;
     private Long goalId;
     private LocalDate goalCreateDate;
-    private List<SubgoalInfo> Subgoals;
+    private List<SubgoalInfo> SubgoalList;
 
     @Data
     @NoArgsConstructor
     public static class SubgoalInfo {
+        private Long subgoalId;
         private String subgoalName;
         private List<LocalDate> doneDateList;
     }

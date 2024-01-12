@@ -13,6 +13,7 @@ import tenten.blooming.domain.user.entity.User;
 import tenten.blooming.domain.user.repository.UserRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,10 +53,23 @@ public class SubgoalService {
 
     public SubgoalResponse getSubgoalInfoByUserId(Long userId) {
         List<Goal> goals = getGoalByUserId(userId);
-//        Goal goal = goals.get(goals.size() - 1);
-
-
+        Goal goal = goals.get(goals.size() - 1);
+        List<Subgoal> subgoals = goal.getSubgoals();
         SubgoalResponse subgoalResponse = new SubgoalResponse();
+        List<SubgoalResponse.SubgoalInfo> subgoalInfoList = new ArrayList<>();
+
+        for(Subgoal subgoal : subgoals) {
+            SubgoalResponse.SubgoalInfo subgoalInfo = new SubgoalResponse.SubgoalInfo();
+            subgoalInfo.setSubgoalId(subgoal.getSubgoalId());
+            subgoalInfo.setSubgoalName(subgoal.getSubgoalName());
+            subgoalInfo.setDoneDateList(subgoal.getDoneDates());
+            subgoalInfoList.add(subgoalInfo);
+        }
+
+        subgoalResponse.setGoalName(goal.getGoalName());
+        subgoalResponse.setGoalId(goal.getGoalId());
+        subgoalResponse.setGoalCreateDate(goal.getCreatedAt());
+        subgoalResponse.setSubgoalList(subgoalInfoList);
 
         return subgoalResponse;
     }
