@@ -14,6 +14,7 @@ import tenten.blooming.domain.user.repository.UserRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -121,7 +122,8 @@ public class SubgoalService {
 
         for(int i = 0; i < doneDates.size(); i++) {
             if(doneDates.get(i) == null) {
-                if(i != 0 && (doneDates.get(i-1) == today)) {
+                System.out.println(doneDates.get(i-1));
+                if(i > 0 && (Objects.equals(doneDates.get(i - 1), today))) {
                     throw new IllegalStateException("이미 체크된 TASK입니다.");
                 }
                 System.out.println(i);
