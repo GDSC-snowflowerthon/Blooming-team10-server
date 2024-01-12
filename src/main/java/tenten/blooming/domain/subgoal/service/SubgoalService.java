@@ -15,6 +15,7 @@ import tenten.blooming.domain.user.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,7 @@ public class SubgoalService {
     public List<LocalDate> updateSubgoal(Long subgoalId) {
         Subgoal findSubgoal = subgoalRepository.findById(subgoalId).orElse(null);
 
-        return findSubgoal.addDoneDate();
+        return addDoneDate(subgoalId);
     }
 
     public List<Goal> getGoalByUserId(Long userId) {
@@ -110,5 +111,85 @@ public class SubgoalService {
         completedGoalInfoResponse.setGoalList(goalList);
 
         return completedGoalInfoResponse;
+    }
+
+
+    //==비즈니스 로직==//
+
+
+    /**
+     * doneDate를 현재 날짜로 입력하고, 업데이트된 doneDates 리스트 반환
+     * @return doneDateCnt
+     */
+    public List<LocalDate> addDoneDate(Long subgoalId) {
+        Subgoal findSubgoal = subgoalRepository.findById(subgoalId).orElse(null);
+        List<LocalDate> doneDates = findSubgoal.getDoneDates();
+
+        for(int i = 0; i < doneDates.size(); i++) {
+            if(doneDates.get(i) == null) {
+                if(i != 0 && (doneDates.get(i-1) == LocalDate.now())) {
+                    throw new IllegalStateException("이미 체크된 TASK입니다.");
+                }
+
+                //doneDatei를 수정해야 한다.
+
+                switch (i + 1) {
+                    case 1: {
+                        findSubgoal.setDoneDate1(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 2: {
+                        findSubgoal.setDoneDate2(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 3: {
+                        findSubgoal.setDoneDate3(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 4: {
+                        findSubgoal.setDoneDate4(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 5: {
+                        findSubgoal.setDoneDate5(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 6: {
+                        findSubgoal.setDoneDate6(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 7: {
+                        findSubgoal.setDoneDate7(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 8: {
+                        findSubgoal.setDoneDate8(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 9: {
+                        findSubgoal.setDoneDate9(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                    case 10: {
+                        findSubgoal.setDoneDate10(LocalDate.now());
+                        subgoalRepository.save(findSubgoal);
+                        break;
+                    }
+                }
+
+                break;
+            }
+        }
+
+        return doneDates;
     }
 }

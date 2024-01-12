@@ -5,10 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import tenten.blooming.domain.goal.entity.Goal;
 import tenten.blooming.domain.goal.repository.GoalRepository;
 import tenten.blooming.domain.subgoal.dto.CompletedGoalInfoResponse;
 import tenten.blooming.domain.subgoal.dto.GetUserIdRequest;
 import tenten.blooming.domain.subgoal.dto.SubgoalResponse;
+import tenten.blooming.domain.subgoal.entity.Subgoal;
+import tenten.blooming.domain.subgoal.repository.SubgoalRepository;
 import tenten.blooming.domain.subgoal.service.SubgoalService;
 import tenten.blooming.domain.user.repository.UserRepository;
 
@@ -22,6 +25,7 @@ public class SubgoalController {
     @Autowired private final GoalRepository goalRepository;
     @Autowired private final SubgoalService subgoalService;
     @Autowired private final UserRepository userRepository;
+    @Autowired private final SubgoalRepository subgoalRepository;
 
     @PostMapping("/subgoal/{goalId}/detail/{subgoalId}")
     public ResponseEntity<List<LocalDate>> updateSubgoal(
