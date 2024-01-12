@@ -48,8 +48,13 @@ public class SubgoalController {
     public ResponseEntity<SubgoalResponse> getSubgoalInfoByUserId(@PathVariable Long userId) {
         SubgoalResponse subgoalResponse = subgoalService.getSubgoalInfoByUserId(userId);
 
-        User findUser = userRepository.findById(userId).orElse(null);
-        subgoalResponse.setNickname(findUser.getNickname());
+        try {
+            User findUser = userRepository.findById(userId).orElse(null);
+            subgoalResponse.setNickname(findUser.getNickname());
+        } catch (IllegalStateException e) {
+            subgoalResponse.setErrorMsg(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(subgoalResponse);
+        }
 
         return ResponseEntity.ok(subgoalResponse);
     }
